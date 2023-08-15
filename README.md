@@ -74,12 +74,13 @@ This creates a directory named `output/segmentation/deeplabv3_resnet50_random/`,
   - videos: directory containing videos with segmentation overlay
 
 #### Testing the segmentation
-    The code to preprocess the videos to convert it into videos suitable for testing the echonet-segmentation videos is availabe in the Jupyter notebook 'ConverDICOMToAVI.ipynb' in scripts folder.  
-    Check the following code to test echonet segmentation on custom dataset. This creates a folder 'Output_test' in the '{path}/echonet/dynamic' directory. Code to calculate dice coefficients from the output is work in progress.
-    `cd scripts/mayo_scripts`
-    `python test_segmentation_mayo.py` 
+The code to preprocess the videos to convert it into videos suitable for testing the echonet-segmentation videos is availabe in the Jupyter notebook 'ConverDICOMToAVI.ipynb' in scripts folder.  
+Check the following code to test echonet segmentation on custom dataset. This creates a folder 'Output_test' in the '{path}/echonet/dynamic' directory. Code to calculate dice coefficients from the output is work in progress.
 
-    Please edit the paths `destinationFolder`, `videosFolder` , `DestinationForWeights` and `model_name` in 'test_segmentation_mayo' folder.
+    cd scripts/mayo_scripts
+    python test_segmentation_mayo.py
+
+Please edit the paths `destinationFolder`, `videosFolder` , `DestinationForWeights` and `model_name` in 'test_segmentation_mayo' folder.
 
 
 
