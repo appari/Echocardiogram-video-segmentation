@@ -21,11 +21,11 @@ We show examples of our semantic segmentation for nine distinct patients below.
 Three patients have normal cardiac function, three have low ejection fractions, and three have arrhythmia.
 No human tracings for these patients were used by EchoNet-Dynamic.
 
-| Normal                                 | Low Ejection Fraction                  | Arrhythmia                             |
-| ------                                 | ---------------------                  | ----------                             |
-| ![](docs/media/0X10A28877E97DF540.gif) | ![](docs/media/0X129133A90A61A59D.gif) | ![](docs/media/0X132C1E8DBB715D1D.gif) |
-| ![](docs/media/0X1167650B8BEFF863.gif) | ![](docs/media/0X13CE2039E2D706A.gif ) | ![](docs/media/0X18BA5512BE5D6FFA.gif) |
-| ![](docs/media/0X148FFCBF4D0C398F.gif) | ![](docs/media/0X16FC9AA0AD5D8136.gif) | ![](docs/media/0X1E12EEE43FD913E5.gif) |
+| Normal                                 | Arrhythmia                             |
+| ------                                 | ----------                             |
+| ![](docs/media/0X10A28877E97DF540.gif) | ![](docs/media/0X132C1E8DBB715D1D.gif) |
+| ![](docs/media/0X1167650B8BEFF863.gif) | ![](docs/media/0X18BA5512BE5D6FFA.gif) |
+| ![](docs/media/0X148FFCBF4D0C398F.gif) | ![](docs/media/0X1E12EEE43FD913E5.gif) |
 
 Installation
 ------------
@@ -80,7 +80,7 @@ Check the following code to test echonet segmentation on custom dataset. This cr
     cd scripts/mayo_scripts
     python test_segmentation_mayo.py
 
-Please edit the paths `destinationFolder`, `videosFolder` , `DestinationForWeights` and `model_name` in 'test_segmentation_mayo' folder.
+Please edit the paths `destinationFolder`, `videosFolder` , `DestinationForWeights` and `model_name` in 'test_segmentation_mayo.py' file.
 
 
 
