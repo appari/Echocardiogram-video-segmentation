@@ -39,26 +39,27 @@ sys.path.append("..")
 
 # This part is the main loop for processing videos and performing the segmentation
 # It includes loading the weights, processing each video, and saving the results
-def process_videos(destinationFolder, videosFolder, DestinationForWeights, model_name):
+def process_videos(destinationFolder, videosFolder, DestinationForWeights, model_name, pretrained = True, aux_loss = True):
     batch_size = 20
     
     # Initialize model
-    model = torchvision.models.segmentation.__dict__[model_name](pretrained=False, aux_loss=False)
+    model = torchvision.models.segmentation.__dict__[model_name](pretrained=pretrained, aux_loss=aux_loss)
     model.classifier[-1] = torch.nn.Conv2d(model.classifier[-1].in_channels, 1, kernel_size=model.classifier[-1].kernel_size)
     
-    print(f"Loading weights for {model_name} from", os.path.join(DestinationForWeights, f"{model_name}_random"))
+    print(f"Loading weights for {model_name} from", os.path.join(DestinationForWeights, model_name))
     
+    model_path = os.path.join(os.path.join(DestinationForWeights,  f"{model_name}_pretrained"), 'best.pt')
     if torch.cuda.is_available():
         print("cuda is available, using original weights")
         device = torch.device("cuda")
         model = torch.nn.DataParallel(model)
         model.to(device)
-        checkpoint = torch.load(os.path.join(DestinationForWeights, f"{model_name}_random.pt"))
+        checkpoint = torch.load(model_path)
         model.load_state_dict(checkpoint['state_dict'])
     else:
         print("cuda is not available, using cpu weights")
         device = torch.device("cpu")
-        checkpoint = torch.load(os.path.join(DestinationForWeights, f"{model_name}_random"), map_location="cpu")
+        checkpoint = torch.load(model_path, map_location="cpu")
         state_dict_cpu = {k[7:]: v for (k, v) in checkpoint['state_dict'].items()}
         model.load_state_dict(state_dict_cpu)
     
@@ -194,26 +195,16 @@ def process_videos(destinationFolder, videosFolder, DestinationForWeights, model
             
 def main():
     destinationFolder = "/home/lalith/echonet/dynamic/Output_test"
-    videosFolder = "/home/lalith/scratch/converted_echo_abnormal_AP4/"
-    DestinationForWeights = "/home/lalith/echonet/dynamic/EchoNetDynamic-Weights"
+    videosFolder = "/home/lalith/scratch/converted_camus"
+    DestinationForWeights = "/home/lalith/echonet/dynamic/output/segmentation"
+    model_name = 'deeplabv3_resnet50'
 
-    # Download model weights
-    if os.path.exists(DestinationForWeights):
-        print("The weights are at", DestinationForWeights)
-    else:
-        print("Creating folder at ", DestinationForWeights, " to store weights")
-        os.mkdir(DestinationForWeights)
-        
-    segmentationWeightsURL = 'https://github.com/douyang/EchoNetDynamic/releases/download/v1.0.0/deeplabv3_resnet50_random.pt'
-
-
-    if not os.path.exists(os.path.join(DestinationForWeights, os.path.basename(segmentationWeightsURL))):
-        print("Downloading Segmentation Weights, ", segmentationWeightsURL," to ",os.path.join(DestinationForWeights,os.path.basename(segmentationWeightsURL)))
-        filename = wget.download(segmentationWeightsURL, out = DestinationForWeights)
+    
+    if not os.path.exists(os.path.join(DestinationForWeights, f"{model_name}_pretrained")):
+        print("Checking Segmentation Weights: ", os.path.join(DestinationForWeights, f"{model_name}_pretrained"), ". But model not present" )
     else:
         print("Segmentation Weights already present")
         
-    model_name = 'deeplabv3_resnet50'
     
     # Call the function
     process_videos(destinationFolder, videosFolder, DestinationForWeights, model_name)
