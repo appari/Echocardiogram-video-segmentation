@@ -29,7 +29,7 @@ import sklearn
 import scipy
 import echonet
 import wget 
-
+import argparse
 
 torch.cuda.empty_cache()
 
@@ -69,6 +69,7 @@ def process_videos(destinationFolder, videosFolder, DestinationForWeights, model
         x = torch.as_tensor(np.swapaxes(np.concatenate(x, 1), 0, 1))
         return x, f, i
     
+    # Defining mean and std from training data. TODO: change this to take mean and std from test data.
     mean = np.array([31.834011, 31.95879, 32.082172])
     std = np.array([48.866325, 49.137333, 49.361984])
     dataloader = torch.utils.data.DataLoader(echonet.datasets.Echo(split="external_test", external_test_location=videosFolder, target_type=["Filename"], length=None, period=1, mean=mean, std=std),
@@ -194,20 +195,30 @@ def process_videos(destinationFolder, videosFolder, DestinationForWeights, model
                     start += offset
             
 def main():
-    destinationFolder = "/home/lalith/echonet/dynamic/Output_test"
-    videosFolder = "/home/lalith/scratch/converted_camus"
-    DestinationForWeights = "/home/lalith/echonet/dynamic/output/segmentation"
-    model_name = 'deeplabv3_resnet50'
+    parser = argparse.ArgumentParser(description="Process videos with segmentation")
+    parser.add_argument("videosFolder", help="Path to Folder containing original videos")
+    parser.add_argument("--destinationFolder", default="../../Output_test", help="Path to Destination folder for processed videos")
+    parser.add_argument("--output", default="../../output/segmentation", help="Path to folder containing segmentation weights")
+    parser.add_argument("--model_name", default="deeplabv3_resnet50", help="Name of the segmentation model")
 
-    
+    args = parser.parse_args()
+
+    if args.videosFolder is None:
+        print("Error: videosFolder argument is required.")
+        parser.print_usage()
+        sys.exit(1)
+
+    videosFolder = args.videosFolder
+    destinationFolder = args.destinationFolder
+    DestinationForWeights = args.output
+    model_name = args.model_name
+
     if not os.path.exists(os.path.join(DestinationForWeights, f"{model_name}_pretrained")):
-        print("Checking Segmentation Weights: ", os.path.join(DestinationForWeights, f"{model_name}_pretrained"), ". But model not present" )
+        print(f"Checking Segmentation Weights: {os.path.join(DestinationForWeights, f'{model_name}_pretrained')}. Model not present.")
     else:
         print("Segmentation Weights already present")
-        
-    
-    # Call the function
+
     process_videos(destinationFolder, videosFolder, DestinationForWeights, model_name)
- 
+
 if __name__ == '__main__':
     main()

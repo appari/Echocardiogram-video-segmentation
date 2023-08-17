@@ -1,4 +1,4 @@
-EchoNet-Dynamic-Segmentation:<br/> Run echonet-segmentation on custom echo videos.
+EchoNet-Dynamic-Segmentation:<br/> Echonet segmentation on custom echo videos.
 ------------------------------------------------------------------------------
 
 EchoNet-Dynamic is a deep learning model for semantic segmentation of the left ventricle.
@@ -33,7 +33,6 @@ Installation
 First, clone this repository and enter the directory by running:
 
     git clone https://github.com/appari/Echocardiogram-video-segmentation
-    cd dynamic
 
 EchoNet-Dynamic is implemented for Python 3, and depends on the following packages:
   - NumPy
@@ -78,9 +77,9 @@ The code to preprocess the videos to convert it into videos suitable for testing
 Check the following code to test echonet segmentation on custom dataset. This creates a folder 'Output_test' in the '{path}/echonet/dynamic' directory. Code to calculate dice coefficients from the output is work in progress.
 
     cd scripts/mayo_scripts
-    python test_segmentation_mayo.py
+    python your_script.py /path/to/videos
 
-Please edit the paths `destinationFolder`, `videosFolder` , `DestinationForWeights` and `model_name` in 'test_segmentation_mayo.py' file.
+Please add paths to `destinationFolder`, `DestinationForWeights` and `model_name` as arguments to the above command.
 
 
 
